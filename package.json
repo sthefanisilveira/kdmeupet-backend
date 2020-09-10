@@ -1,0 +1,31 @@
+{
+  "name": "kd_meupet",
+  "version": "1.0.0",
+  "description": "Site para encontrar animais perdidos e disponíveis para adoção.",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sthefanisilveira/kdmeupet-backend.git"
+  },
+  "keywords": [
+    "pet",
+    "petsearch",
+    "adoção",
+    "perdido"
+  ],
+  "author": "Sthéfani Silveira",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.1.0",
+    "request": "^2.88.2",
+    "mongoose": "*"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
