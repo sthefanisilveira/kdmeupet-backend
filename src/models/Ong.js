@@ -1,8 +1,7 @@
 // Chamadas dos pacotes:
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
-const OngSchema = new Schema({
+const OngSchema = new mongoose.Schema({
     // nome cpnj responsavel endereco logo
     nome: {
         type: String,
@@ -22,17 +21,6 @@ const OngSchema = new Schema({
     },
 });
 
-module.exports = mongoose.model('ongs', OngSchema);   
+const Ong = mongoose.model('Ong', OngSchema);
 
-const AbrigoAnimal = mongoose.model('ongs');
-
-new AbrigoAnimal({
-    nome: "Abrigo Animal",
-    cnpj: 456445,
-    responsavel: "João Silva",
-    endereco: "Rua ABC"
-}).save().then(() => {
-    console.log("Ong cadastrada com sucesso!")
-}).catch((err) => {
-    console.log("Houve um erro ao cadastrar a Ong: " +err)
-});
+module.exports = Ong;   

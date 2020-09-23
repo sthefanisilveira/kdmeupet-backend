@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Ong = mongoose.model('ongs');
+const Ong = mongoose.model('Ong');
 
 module.exports = {
     async index(req, res) {

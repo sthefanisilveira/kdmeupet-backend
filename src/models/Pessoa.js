@@ -1,9 +1,9 @@
 // Chamadas dos pacotes:
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const bcrypt = require('bcryptjs');
 
-const PessoaSchema = new Schema({
-    // nome cpf endereco logo
+const PessoaSchema = new mongoose.Schema({
+    // nome cpf endereco e-mail senha
     nome: {
         type: String,
         require: true
@@ -16,19 +16,26 @@ const PessoaSchema = new Schema({
         type: String,
         require: true
     },
+    email: {
+        type: String,
+        require: true,
+        lowercase: true,
+    },
+    senha: {
+        type: String,
+        require: true,
+        select: false,
+    },
 });
 
-module.exports = mongoose.model('pessoas', PessoaSchema);   
+PessoaSchema.pre('save', async function(next) {
+	const hash = await bcrypt.hash(this.senha, 10);
+	this.senha = hash;
 
-const Joana = mongoose.model('pessoas');
-
-new Joana ({
-    nome: "Joana Silva",
-    cpf: 54874454,
-    endereco: "Rua XYZ"
-}).save().then(() => {
-    console.log("Pessoa cadastrada com sucesso!")
-}).catch((err) => {
-    console.log("Houve um erro ao cadastrar a Pessoa: " +err)
+	next();
 });
+
+const Pessoa = mongoose.model('Pessoa', PessoaSchema);
+
+module.exports = Pessoa;   
 

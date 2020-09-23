@@ -1,19 +1,34 @@
 // Chamadas dos pacotes:
 const express = require('express');
 const app = express();
-const bodyParser = require("body-parser");
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const Ong = require('./src/models/Ong');
-const Pessoa = require('./src/models/Pessoa');
-const Animal = require('./src/models/Animal');
+const requireDir = require('require-dir'); 
 
-// Carregando as rotas:
-const index = require('./src/routes/index');
-const ongs = require('./src/routes/ongs');
+// Configurando o mongoose:
+mongoose.connect('mongodb+srv://pet-api:Apipet1@kdmeupet-api.zmhya.azure.mongodb.net/kdmeupet-api?retryWrites=true&w=majority', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => {
+    console.log("MongoDB conectado...")
+ }).catch((err) => {
+    console.log("Houve um erro ao se conectar ao MongoDB: " +err)
+ });
+
+// Carregando os models
+requireDir('./src/models');
+const Animal = mongoose.model('Animal');
+const Ong = mongoose.model('Ong');
+const Pessoa = mongoose.model('Pessoa');
 
 // Configuração da variável app para usar o bodyParser():
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+
+// Carregando as rotas
+app.use('/api', require('./src/routes'));
+
+require('./src/controllers/Login')(app);
 
 // Definição da porta para a execução da API:
 const PORT = 3000;
@@ -22,17 +37,5 @@ const PORT = 3000;
 app.listen(PORT, function() {
     console.log(`O Express está rodando na porta ${PORT}`);
 });
-
-// Configurando o mongoose:
-mongoose.connect('mongodb+srv://pet-api:Apipet1@kdmeupet-api.zmhya.azure.mongodb.net/kdmeupet-api?retryWrites=true&w=majority', {
-    useMongoClient: true,
-}).then(() => {
-    console.log("MongoDB conectado...")
- }).catch((err) => {
-    console.log("Houve um erro ao se conectar ao MongoDB: " +err)
- });
-
-app.use('/', index);
-app.use('/ongs', ongs);
 
 module.exports = app; 
