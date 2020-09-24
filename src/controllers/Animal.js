@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Animal = mongoose.model('animais');
+const Animal = mongoose.model('Animal');
 
 module.exports = {
     async index(req, res) {
