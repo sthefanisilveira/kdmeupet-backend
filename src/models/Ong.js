@@ -1,9 +1,10 @@
 // Chamadas dos pacotes:
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const OngSchema = new mongoose.Schema({
     // nome cpnj responsavel endereco logo
-    nome: {
+    name: {
         type: String,
         require: true
     },
@@ -11,14 +12,36 @@ const OngSchema = new mongoose.Schema({
         type: Number,
         require: true
     },
-    responsavel: {
+    responsible: {
         type: String,
         require: true
     },
-    endereco: {
+    address: {
         type: String,
         require: true
     },
+    email: {
+        type: String,
+        require: true,
+        lowercase: true,
+        unique: true,
+    },
+    password: {
+        type: String,
+        require: true,
+        select: false,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    }       
+});
+
+OngSchema.pre('save', async function(next) {
+	const hash = await bcrypt.hash(this.password, 10);
+	this.password = hash;
+
+	next();
 });
 
 const Ong = mongoose.model('Ong', OngSchema);

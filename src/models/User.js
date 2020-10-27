@@ -2,9 +2,9 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-const PessoaSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
     // nome cpf endereco e-mail senha
-    nome: {
+    name: {
         type: String,
         require: true
     },
@@ -12,30 +12,35 @@ const PessoaSchema = new mongoose.Schema({
         type: Number,
         require: true
     },
-    endereco: {
+    address: {
         type: String,
         require: true
     },
     email: {
         type: String,
         require: true,
+        unique: true,
         lowercase: true,
     },
-    senha: {
+    password: {
         type: String,
         require: true,
         select: false,
     },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    }
 });
 
-PessoaSchema.pre('save', async function(next) {
-	const hash = await bcrypt.hash(this.senha, 10);
-	this.senha = hash;
+UserSchema.pre('save', async function(next) {
+	const hash = await bcrypt.hash(this.password, 10);
+	this.password = hash;
 
 	next();
 });
 
-const Pessoa = mongoose.model('Pessoa', PessoaSchema);
+const User = mongoose.model('User', UserSchema);
 
-module.exports = Pessoa;   
+module.exports = User;   
 

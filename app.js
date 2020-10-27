@@ -19,7 +19,7 @@ mongoose.connect('mongodb+srv://pet-api:Apipet1@kdmeupet-api.zmhya.azure.mongodb
 requireDir('./src/models');
 const Animal = mongoose.model('Animal');
 const Ong = mongoose.model('Ong');
-const Pessoa = mongoose.model('Pessoa');
+const User = mongoose.model('User');
 
 // Configuração da variável app para usar o bodyParser():
 app.use(bodyParser.urlencoded({extended: false}));

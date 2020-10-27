@@ -1,48 +1,102 @@
 // // Chamadas dos pacotes:
 const express = require('express');
 const app = require('../../app');
-const Pessoa = require('../models/Pessoa'); 
+const User = require('../models/User'); 
+const Ong = require('../models/Ong');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const authConfig = require('../config/auth.json');
 
-router.post('/login', async (req, res) => {
+function generateToken(params = {}) {
+    return jwt.sign(params, authConfig.secret, {
+        expiresIn: 86400,
+    });
+}
+
+// Adicionando cadastro do usuário
+router.post('/usuario/cadastro', async (req, res) => {
     const { email } = req.body;
 
 	try {
-        if (await Pessoa.findOne({ email }))
+        if (await User.findOne({ email }))
 	    return res.status(400).send({ erro: 'Usuário já existe' });
 
-        const pessoa = await Pessoa.create(req.body);
+        const user = await User.create(req.body);
         
-        Pessoa.senha = undefined;
+        User.password = undefined;
 
-		return res.send({ pessoa });
+        return res.send({ 
+            user,
+            token: generateToken({ id: user.id }),
+        });
+        
 	} catch (err) {
 		return res.status(400).send({ erro: 'Não foi possível efetuar o login' });
 	}
 });
 
-router.post('/authenticate', async (req, res) => {
-    const { email, senha } = req.body;
+// Adicionando login do usuário
+router.post('/usuario/login', async (req, res) => {
+    const { email, password } = req.body;
 
-    const pessoa = await Pessoa.findOne({ email }).select('+senha');
+    const user = await User.findOne({ email }).select('+password');
 
-    if (!pessoa)
+    if (!user)
     return res.status(400).send({ erro: 'Usuário não encontrado'});
     
-    if (!await bcrypt.compare(senha, pessoa.senha))
+    if (!await bcrypt.compare(password, user.password))
 	return res.status(400).send({ erro: 'Senha inválida'});
 
-    pessoa.senha = undefined;
+    user.password = undefined;
 
-    const token = jwt.sign({ id: pessoa.id }, authConfig.secret, {
-        expiresIn: 86400,
-    })
-    
-
-    res.send({ pessoa, token });
+    res.send({ 
+        user,
+        token: generateToken({ id: user.id }), 
+    });
 });
+
+// Adicionando cadastro da ONG
+router.post('/ong/cadastro', async (req, res) => {
+    const { email } = req.body;
+
+	try {
+        if (await Ong.findOne({ email }))
+	    return res.status(400).send({ erro: 'Ong já existe' });
+
+        const ong = await Ong.create(req.body);
+        
+        Ong.password = undefined;
+
+		return res.send({ 
+            ong,
+            token: generateToken({ id: ong.id }),
+        });
+
+	} catch (err) {
+		return res.status(400).send({ erro: 'Não foi possível efetuar o login' });
+	}
+});
+
+// Adicionando login da ONG
+router.post('/ong/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    const ong = await Ong.findOne({ email }).select('+password');
+
+    if (!ong)
+    return res.status(400).send({ erro: 'Ong não encontrada'});
+    
+    if (!await bcrypt.compare(password, ong.password))
+	return res.status(400).send({ erro: 'Senha inválida'});
+
+    ong.password = undefined;
+
+    res.send({ 
+        ong,
+        token: generateToken({ id: ong.id }), 
+    });
+});
+
 
 module.exports = app => app.use('/auth', router);
