@@ -3,34 +3,38 @@ const mongoose = require('mongoose');
 
 const AnimalSchema = new mongoose.Schema({
     // nome idade raça cor tipo deficiencia comportamento foto
-    nome: {
+    name: {
         type: String,
         require: true
     },
-    idade: {
+    age: {
         type: Number,
         require: true
     },
-    raca: {
+    breed: {
         type: String,
         require: true
     },
-    cor: {
+    color: {
         type: String,
         require: true
     },
-    tipo: {
+    type: {
         type: String,
         require: true
     },
-    deficiencia: {
+    deficiency: {
         type: String,
         require: true
     },
-    comportamento: {
+    behavior: {
         type: String,
         require: true
     },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    }
 });
 
 const Animal = mongoose.model('Animal', AnimalSchema);

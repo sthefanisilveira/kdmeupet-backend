@@ -1,10 +1,13 @@
 const express = require('express');
+const authMiddleware = require('../middlewares/auth');
 const router = express.Router();
 
 // Adicionando os controllers
 const Animal = require('../controllers/Animal');
 const Ong = require('../controllers/Ong');
-const Pessoa = require('../controllers/Pessoa');
+const User = require('../controllers/User');
+
+router.use(authMiddleware);
 
 // Rota principal
 router.get('/', function(req, res) {
@@ -25,11 +28,11 @@ router.get('/animal/:id', Animal.show);
 router.put('/animal/:id', Animal.update);
 router.delete('/animal/:id', Animal.destroy);
 
-// Adicionando rotas das Pessoas
-router.get('/pessoa', Pessoa.index);
-router.post('/pessoa', Pessoa.store);
-router.get('/pessoa/:id', Pessoa.show);
-router.put('/pessoa/:id', Pessoa.update);
-router.delete('/pessoa/:id', Pessoa.destroy);
+// Adicionando rotas de usuários
+router.get('/usuario', User.index);
+router.post('/usuario', User.store);
+router.get('/usuario/:id', User.show);
+router.put('/usuario/:id', User.update);
+router.delete('/usuario/:id', User.destroy);
 
 module.exports = router;
