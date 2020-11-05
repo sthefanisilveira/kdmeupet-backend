@@ -8,7 +8,10 @@ const requireDir = require('require-dir');
 // Configurando o mongoose:
 mongoose.connect('mongodb+srv://pet-api:Apipet1@kdmeupet-api.zmhya.azure.mongodb.net/kdmeupet-api?retryWrites=true&w=majority', {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true
+    
 }).then(() => {
     console.log("MongoDB conectado...")
  }).catch((err) => {

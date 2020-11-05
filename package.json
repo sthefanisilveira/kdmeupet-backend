@@ -25,6 +25,9 @@
     "express-handlebars": "^5.1.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.5",
+    "nodemailer": "^6.4.14",
+    "nodemailer-express-handlebars": "^4.0.0",
+    "path": "^0.12.7",
     "request": "^2.88.2",
     "require-dir": "^1.2.0"
   },

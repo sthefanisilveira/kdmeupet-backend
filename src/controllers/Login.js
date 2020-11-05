@@ -7,6 +7,8 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const authConfig = require('../config/auth.json');
+const crypto = require('crypto');
+const mailer = require('../modules/mailer');
 
 function generateToken(params = {}) {
     return jwt.sign(params, authConfig.secret, {
@@ -98,5 +100,73 @@ router.post('/ong/login', async (req, res) => {
     });
 });
 
+// Adicionando recuperação de senha
+router.post('/forgot_password', async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+
+        if(!user)
+            return res.status(400).send({ error: 'Usuário não encontrado' });
+
+        const token = crypto.randomBytes(20).toString('hex');
+
+        const now = new Date();
+        now.setHours(now.getHours() + 1);
+
+        await User.findByIdAndUpdate(user.id, {
+            '$set': {
+                passwordResetToken: token,
+                passwordResetExpires: now,
+            }
+        });
+
+        mailer.sendMail({
+            to: email,
+            from: 'silveira.sthefani1@gmail.com',
+            template: 'auth/forgot_password',
+            context: { token }, 
+        }, (err) => {
+            if (err)
+                return res.status(400).send({ error: 'Não foi possível enviar o e-mail de recuperação de senha' });
+            
+            return res.send();
+        })
+
+    } catch (err) {
+        res.status(400).send({ error: 'Erro na página de esqueci a senha, tente novamente' });
+    }
+
+});
+
+router.post('/reset_password', async (req,res) => {
+    const { email, token, password } = req.body;
+
+    try {
+        const user = await User.findOne({ email })
+            .select('+passwordResetToken passwordResetExpires');
+
+        if(!user)
+            return res.status(400).send({ error: 'Usuário não encontrado' });
+
+        if( token !== user.passwordResetToken)
+            return res.status(400).send({ error: 'Token inválido' });
+
+        const now = new Date();
+
+        if (now > user.passwordResetExpires)
+            return res.status(400).send({ error: 'Token expirado, gere um novo' });
+
+        user.password = password;
+
+        await user.save();
+
+        res.send();
+
+    } catch (err) {
+        res.status(400).send({ error: 'Não foi possível resetar a senha, tente novamente' });
+    }
+});
 
 module.exports = app => app.use('/auth', router);
