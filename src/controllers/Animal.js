@@ -3,7 +3,7 @@ const Animal = mongoose.model('Animal');
 
 module.exports = {
     async index(req, res) {
-      const animal = await Animal.find();
+      const animal = await Animal.find().populate('ong');
       return res.json(animal);
     },
   
@@ -13,7 +13,7 @@ module.exports = {
     },
   
     async store(req, res) {
-      const animal = await Animal.create(req.body);
+      const animal = await Animal.create({ ...req.body, ong: req.ongId }); 
       return res.json(animal);
     },
   

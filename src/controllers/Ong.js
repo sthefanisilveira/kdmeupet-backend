@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Ong = mongoose.model('Ong');
+const Animal = mongoose.model('Animal');
 
 module.exports = {
     async index(req, res) {
@@ -13,8 +14,28 @@ module.exports = {
     },
   
     async store(req, res) {
-      const ong = await Ong.create(req.body);
-      return res.json(ong);
+      try { 
+
+        const { name, cnpj, responsible, address, animals } = await req.body;
+
+        const ong = await Ong.create({ name, cnpj, responsible, address });
+  
+        await Promise.all(animals.map(async animal => {
+          console.log(animal);
+          const ongAnimal = new Animal({ animal, ong: ong._id });
+  
+          await ongAnimal.save();
+
+          ong.animals.push(ongAnimal);
+        }));
+  
+        await ong.save();
+  
+        return res.send(ong);
+      } catch (err) {
+        console.log(err);
+        return res.status(400).send({ error: 'Erro ao criar uma nova Ong' });
+      }      
     },
   
     async update(req, res) {
