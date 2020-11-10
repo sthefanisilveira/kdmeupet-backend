@@ -2,21 +2,21 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+const mongoose = require('./database/index');
 const requireDir = require('require-dir'); 
 
 // Configurando o mongoose:
-mongoose.connect('mongodb+srv://pet-api:Apipet1@kdmeupet-api.zmhya.azure.mongodb.net/kdmeupet-api?retryWrites=true&w=majority', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true
+// mongoose.connect('mongodb+srv://pet-api:Apipet1@kdmeupet-api.zmhya.azure.mongodb.net/kdmeupet-api?retryWrites=true&w=majority', {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     useFindAndModify: false,
+//     useCreateIndex: true
     
-}).then(() => {
-    console.log("MongoDB conectado...")
- }).catch((err) => {
-    console.log("Houve um erro ao se conectar ao MongoDB: " +err)
- });
+// }).then(() => {
+//     console.log("MongoDB conectado...")
+//  }).catch((err) => {
+//     console.log("Houve um erro ao se conectar ao MongoDB: " +err)
+//  });
 
 // Carregando os models
 requireDir('./src/models');

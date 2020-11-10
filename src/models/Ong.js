@@ -31,6 +31,10 @@ const OngSchema = new mongoose.Schema({
         require: true,
         select: false,
     },
+    animals: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Animal',
+    }],
     createdAt: {
         type: Date,
         default: Date.now,
@@ -38,10 +42,11 @@ const OngSchema = new mongoose.Schema({
 });
 
 OngSchema.pre('save', async function(next) {
-	const hash = await bcrypt.hash(this.password, 10);
-	this.password = hash;
+	bcrypt.hash(this.password, 10, function(err, hash) {
+        this.password = hash;
 
-	next();
+        next();
+    });
 });
 
 const Ong = mongoose.model('Ong', OngSchema);
