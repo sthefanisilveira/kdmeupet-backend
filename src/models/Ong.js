@@ -38,6 +38,10 @@ const OngSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now,
+    },
+    typeProfile: {
+        type: String,
+        require: true,
     }       
 });
 

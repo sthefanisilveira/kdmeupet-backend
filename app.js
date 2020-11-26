@@ -1,22 +1,11 @@
 // Chamadas dos pacotes:
 const express = require('express');
 const app = express();
+const cors = require('cors');
+
 const bodyParser = require('body-parser');
 const mongoose = require('./database/index');
 const requireDir = require('require-dir'); 
-
-// Configurando o mongoose:
-// mongoose.connect('mongodb+srv://pet-api:Apipet1@kdmeupet-api.zmhya.azure.mongodb.net/kdmeupet-api?retryWrites=true&w=majority', {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//     useFindAndModify: false,
-//     useCreateIndex: true
-    
-// }).then(() => {
-//     console.log("MongoDB conectado...")
-//  }).catch((err) => {
-//     console.log("Houve um erro ao se conectar ao MongoDB: " +err)
-//  });
 
 // Carregando os models
 requireDir('./src/models');
@@ -31,10 +20,22 @@ app.use(bodyParser.json());
 // Carregando as rotas
 app.use('/api', require('./src/routes'));
 
+app.use((req, res, next) => {
+	//Qual site tem permissão de realizar a conexão, no exemplo abaixo está o "*" indicando que qualquer site pode fazer a conexão
+    res.header("Access-Control-Allow-Origin", "*");
+	//Quais são os métodos que a conexão pode realizar na API
+    res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
+    app.use(cors());
+    next();
+});
+
+app.options('*', cors());
 require('./src/controllers/Login')(app);
 
 // Definição da porta para a execução da API:
 const PORT = 3000;
+
+app.use(cors());
 
 // Iniciando a aplicação (servidor):
 app.listen(PORT, function() {
