@@ -34,7 +34,7 @@ router.post('/usuario/cadastro', async (req, res) => {
         });
         
 	} catch (err) {
-		return res.status(400).send({ erro: 'Não foi possível efetuar o login' });
+		return res.status(400).send({ erro: 'Não foi possível efetuar o cadastro' });
 	}
 });
 

@@ -9,12 +9,10 @@ const UserSchema = new mongoose.Schema({
         require: true
     },
     cpf: {
-        type: Number,
-        require: true
+        type: Number
     },
     address: {
-        type: String,
-        require: true
+        type: String
     },
     email: {
         type: String,
@@ -38,6 +36,10 @@ const UserSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now,
+    },
+    typeProfile: {
+        type: String,
+        require: true,
     }
 });
 
