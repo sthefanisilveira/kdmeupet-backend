@@ -6,6 +6,7 @@ const router = express.Router();
 const Animal = require('../controllers/Animal');
 const Ong = require('../controllers/Ong');
 const User = require('../controllers/User');
+const Resource = require('../controllers/Resource');
 
 router.use(authMiddleware);
 
@@ -34,5 +35,12 @@ router.post('/usuario', User.store);
 router.get('/usuario/:id', User.show);
 router.put('/usuario/:id', User.update);
 router.delete('/usuario/:id', User.destroy);
+
+// Adicionando rotas de recursos
+router.get('/recurso', Resource.index);
+router.post('/recurso', Resource.store);
+router.get('/recurso/:id', Resource.show);
+router.put('/recurso/:id', Resource.update);
+router.delete('/recurso/:id', Resource.destroy);
 
 module.exports = router;
