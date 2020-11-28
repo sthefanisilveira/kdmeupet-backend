@@ -40,6 +40,9 @@ const UserSchema = new mongoose.Schema({
     typeProfile: {
         type: String,
         require: true,
+    },
+    image: {
+        type: String,
     }
 });
 

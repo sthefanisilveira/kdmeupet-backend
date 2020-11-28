@@ -14,7 +14,10 @@ module.exports = {
     },
   
     async store(req, res) {
+
       try { 
+
+        // var image = req.file.originalname;
 
         const { name, cnpj, responsible, address, animals } = await req.body;
 

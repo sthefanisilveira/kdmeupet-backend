@@ -36,6 +36,9 @@ const AnimalSchema = new mongoose.Schema({
         ref: 'Ong',
         require: true,
     },
+    image: {
+        type: String,
+    },
     // user: {
     //     type: mongoose.Schema.Types.ObjectId,
     //     ref: 'User',
