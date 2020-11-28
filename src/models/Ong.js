@@ -42,7 +42,8 @@ const OngSchema = new mongoose.Schema({
     typeProfile: {
         type: String,
         require: true,
-    }       
+    },
+           
 });
 
 OngSchema.pre('save', async function(next) {

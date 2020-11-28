@@ -13,7 +13,8 @@ module.exports = {
     },
   
     async store(req, res) {
-      const animal = await Animal.create({ ...req.body, ong: req.ongId }); 
+      var image = req.file.originalname;
+      const animal = await Animal.create({ ...req.body, ong: req.ongId, image }); 
       return res.json(animal);
     },
   
