@@ -17,6 +17,10 @@ router.get('/', function(req, res) {
     res.send("Página principal")
 });
 
+router.get('/image', (req, res) => {
+    res.sendFile(path.join(__dirname, "./uploads/image.png"));
+});
+
 // Adicionando rotas das Ongs
 router.get('/ong', Ong.index);
 router.post('/ong', multer(multerConfig).single('file'), Ong.store);

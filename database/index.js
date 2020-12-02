@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb+srv://pet-api:Apipet1@kdmeupet-api.zmhya.azure.mongodb.net/kdmeupet-api?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex : true}).then(() => {
+mongoose.connect('mongodb://cris:teste123@ds139934.mlab.com:39934/pets-api').then(() => {
     console.log("MongoDB conectado...")
  }).catch((err) => {
     console.log("Houve um erro ao se conectar ao MongoDB: " +err)
